@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { addArticle, updateArticle } from '../store/actions/article';
 
@@ -17,11 +18,33 @@ const mapDispatchToProps = dispatch => ({
 @connect(mapStateToProps, mapDispatchToProps)
 
 class Form extends Component {
+  static defaultProps = {
+    location: null,
+    redirect: false,
+    onAddArticle: null,
+    onUpdateArticle: null,
+  };
+
   state = {
     title: '',
     body: '',
     fieldErrors: {},
   };
+
+  componentDidMount() {
+    const { location } = this.props;
+    if (!location.state) return;
+    const oldTitle = location.state.title;
+    const oldBody = location.state.body;
+
+    this.refs.title.value = oldTitle;
+    this.refs.body.value = oldBody;
+
+    this.setState({
+      title: oldTitle,
+      body: oldBody,
+    });
+  }
 
   componentDidUpdate() {
     const { redirect, history } = this.props;
@@ -86,6 +109,7 @@ class Form extends Component {
               className="form-control"
               id="title"
               onChange={this.onChangeHandler}
+              ref="title"
             />
             <span style={{ color: 'red' }}>{title}</span>
           </div>
@@ -96,6 +120,7 @@ class Form extends Component {
               id="body"
               rows="10"
               onChange={this.onChangeHandler}
+              ref="body"
             />
             <span style={{ color: 'red' }}>{body}</span>
           </div>
@@ -117,5 +142,20 @@ class Form extends Component {
     );
   }
 }
+
+Form.propTypes = {
+  location: PropTypes.shape({
+    state: PropTypes.object,
+  }),
+  match: PropTypes.shape({
+    params: PropTypes.object,
+  }).isRequired,
+  redirect: PropTypes.bool,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+  onAddArticle: PropTypes.func,
+  onUpdateArticle: PropTypes.func,
+};
 
 export default withRouter(Form);

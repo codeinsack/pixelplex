@@ -73,7 +73,6 @@ export const updateArticleSuccess = () => ({
 
 
 export const updateArticle = (articleId, article) => (dispatch) => {
-  console.log(article);
   axios.put(`api/articles/${articleId}`, article)
     .then(() => {
       dispatch(updateArticleSuccess());

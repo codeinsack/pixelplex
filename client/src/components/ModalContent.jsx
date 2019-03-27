@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = state => ({
   article: state.article.article,
@@ -8,6 +9,10 @@ const mapStateToProps = state => ({
 @connect(mapStateToProps)
 
 class ModalContent extends Component {
+  static defaultProps = {
+    article: null,
+  };
+
   render() {
     const { article } = this.props;
 
@@ -22,7 +27,6 @@ class ModalContent extends Component {
           </div>
           <div className="modal-body">
             { article ? article.body : null }
-            ...
           </div>
           <div className="modal-footer d-flex mr-auto">
             <small className="">
@@ -37,5 +41,12 @@ class ModalContent extends Component {
     );
   }
 }
+
+ModalContent.propTypes = {
+  article: PropTypes.shape({
+    title: PropTypes.string,
+    body: PropTypes.string,
+  }),
+};
 
 export default ModalContent;
