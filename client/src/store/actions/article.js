@@ -16,9 +16,9 @@ export const fetchArticlesStart = () => ({
   type: actionTypes.FETCH_ARTICLES_START,
 });
 
-export const fetchArticles = page => (dispatch) => {
+export const fetchArticles = (page, limit) => (dispatch) => {
   dispatch(fetchArticlesStart());
-  axios.get(`api/articles?page=${page}&limit=10`)
+  axios.get(`api/articles?page=${page}&limit=${limit || 10}`)
     .then((response) => {
       const { articles, count } = response.data;
       dispatch(fetchArticlesSuccess(articles, count));

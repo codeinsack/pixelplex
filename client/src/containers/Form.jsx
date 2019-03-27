@@ -98,6 +98,24 @@ class Form extends Component {
     const { match } = this.props;
     const { id } = match.params;
 
+    let alertTitle = null;
+    let alertBody = null;
+
+    if (title) {
+      alertTitle = (
+        <div className="alert alert-danger mt-2" role="alert">
+          {title}
+        </div>
+      );
+    }
+    if (body) {
+      alertBody = (
+        <div className="alert alert-danger mt-2" role="alert">
+          {body}
+        </div>
+      );
+    }
+
     return (
       <div className="container w-50">
         <h2 className="mt-5 mb-4">Articles / { id ? 'edit' : 'create' }</h2>
@@ -111,7 +129,7 @@ class Form extends Component {
               onChange={this.onChangeHandler}
               ref="title"
             />
-            <span style={{ color: 'red' }}>{title}</span>
+            { alertTitle }
           </div>
           <div className="form-group">
             <label htmlFor="body">Body:</label>
@@ -122,7 +140,7 @@ class Form extends Component {
               onChange={this.onChangeHandler}
               ref="body"
             />
-            <span style={{ color: 'red' }}>{body}</span>
+            { alertBody }
           </div>
           <button
             type="submit"

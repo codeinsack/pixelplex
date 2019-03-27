@@ -5,22 +5,20 @@ import { connect } from 'react-redux';
 import { fetchArticles } from '../store/actions/article';
 
 const mapDispatchToProps = dispatch => ({
-  onFetchArticles: page => dispatch(fetchArticles(page)),
+  onFetchArticles: (page, limit) => dispatch(fetchArticles(page, limit)),
 });
 
 @connect(null, mapDispatchToProps)
 
 class Pagination extends ReactQueryParams {
-  state = {
-    currentPage: 1,
-  };
-
   onChangePage = (page) => {
     const { onFetchArticles } = this.props;
+    const limit = this.queryParams.limit || 10;
     this.setQueryParams({
       page,
+      limit,
     });
-    onFetchArticles(page);
+    onFetchArticles(page, limit);
   };
 
   render() {

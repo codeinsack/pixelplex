@@ -6,6 +6,7 @@ import { fetchArticles, redirectAfterDataSent } from '../store/actions/article';
 import Spinner from '../components/Spinner';
 import Table from './Table';
 import Pagination from '../components/Pagination';
+import Limit from '../components/Limit';
 
 const mapStateToProps = state => ({
   articles: state.article.articles,
@@ -14,7 +15,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchArticles: page => dispatch(fetchArticles(page)),
+  onFetchArticles: (page, limit) => dispatch(fetchArticles(page, limit)),
   onRedirectCancel: page => dispatch(redirectAfterDataSent(page)),
 });
 
@@ -24,8 +25,10 @@ class Articles extends ReactQueryParams {
   componentDidMount() {
     const { onFetchArticles, onRedirectCancel } = this.props;
     const page = this.queryParams.page || 1;
+    let limit = this.queryParams.limit || 10;
+    if (limit > 10) limit = 10;
 
-    onFetchArticles(page);
+    onFetchArticles(page, limit);
     onRedirectCancel();
   }
 
@@ -54,6 +57,7 @@ class Articles extends ReactQueryParams {
       <div className="container mt-5">
         <div className="d-flex justify-content-between mb-3">
           <h2>Articles</h2>
+          <Limit />
           <button type="button" className="btn btn-primary" onClick={this.onRedirectToForm}>Create</button>
         </div>
         <div className="d-flex flex-column align-items-center">
